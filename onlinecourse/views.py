@@ -86,6 +86,7 @@ class CourseListView(generic.ListView):
 
 class CourseDetailView(generic.DetailView):
     model = Course
+    context_object_name = 'course'
     template_name = 'onlinecourse/course_detail_bootstrap.html'
 
 
