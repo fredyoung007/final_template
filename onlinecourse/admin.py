@@ -26,7 +26,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    inlinces = [QuestionInline]
+    inlines = [QuestionInline]
     list_display = ['title']
 
 class QuestionAdmin(admin.ModelAdmin):
