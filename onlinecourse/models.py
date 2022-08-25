@@ -1,4 +1,5 @@
 import sys
+from turtle import title
 from django.utils.timezone import now
 try:
     from django.db import models
@@ -75,6 +76,8 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
 
+    def __str__(self):
+        return self.title    
 
 # Enrollment model
 # <HINT> Once a user enrolled a class, an enrollment entry should be created between the user and course
@@ -118,6 +121,9 @@ class Question(models.Model):
         else:
             return False
 
+    def __str__(self):
+        return self.question 
+
 
 #  <HINT> Create a Choice Model with:
     # Used to persist choice content for a question
@@ -136,5 +142,5 @@ class Choice(models.Model):
 # One choice could belong to multiple submissions
 class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-    chocies = models.ManyToManyField(Choice)
+    choices = models.ManyToManyField(Choice)
 #    Other fields and methods you would like to design

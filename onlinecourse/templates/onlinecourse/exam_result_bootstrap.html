@@ -39,12 +39,12 @@
     {% if grade > 80 %}
     <div class="alert alert-success">
        <!--HINT Display passed info -->
-       Contratulations {{user}}. You have passed with the exam and completed the course with score 100/100
+       Contratulations {{user}}. You have passed with the exam and completed the course with score {{grade}}.
     </div>
         {% else %}
         <div class="alert alert-danger">
             <!--HINT Display failed info -->
-            Failed. Sorry {{user}}. You have failed the exam with score 60/100
+            Failed. Sorry {{user}}. You have failed the exam with score {{grade}}.
         </div>
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
         {% endif %}
