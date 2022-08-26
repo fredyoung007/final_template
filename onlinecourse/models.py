@@ -1,5 +1,4 @@
 import sys
-from turtle import title
 from django.utils.timezone import now
 try:
     from django.db import models

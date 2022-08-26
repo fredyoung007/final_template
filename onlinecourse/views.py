@@ -115,7 +115,8 @@ def enroll(request, course_id):
 def submit(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
-    submission = Submission(enrollment = Enrollment.objects.get(user=user, course=course))
+#    submission = Submission(enrollment = Enrollment.objects.get(user=user, course=course))
+    submission = Submission(enrollment = Enrollment.objects.get(user=1, course=course))
     submission.save()
     choices = extract_answers(request)
     submission.choices.add(*choices)
