@@ -151,8 +151,8 @@ def show_exam_result(request, course_id, submission_id):
 
     # calculate score
     grade = 0
-    for choice in choices:
-        question = Question.objects.get(id=choice.question.id)
+    questions = Question.objects.all()
+    for question in questions:
         selected_ids = submission.choices.filter(question_id=question.id).values_list('pk', flat=True)
         if question.is_get_score(selected_ids):
             grade += question.grade
