@@ -77,7 +77,7 @@ class Lesson(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.title    
+        return f'title={self.title} content={self.content}' 
 
 # Enrollment model
 # <HINT> Once a user enrolled a class, an enrollment entry should be created between the user and course
@@ -122,7 +122,7 @@ class Question(models.Model):
             return False
 
     def __str__(self):
-        return self.question 
+        return f'question={self.question } grade={self.grade} lesson={self.lesson_id}'
 
 
 #  <HINT> Create a Choice Model with:
@@ -136,6 +136,9 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'ID={self.id} choice={self.choice} qeustion={self.question_id} is_correct={self.is_correct}'
+
 # <HINT> The submission model
 # One enrollment could have multiple submission
 # One submission could have multiple choices
@@ -143,4 +146,7 @@ class Choice(models.Model):
 class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
-#    Other fields and methods you would like to design
+
+    def __str__(self):
+        cstr = ','.join(str(c) for c in self.choices.all())
+        return f'Submission: ID={self.id}; choices=[{cstr}]'

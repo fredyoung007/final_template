@@ -51,6 +51,22 @@
         <div class="card-columns-vertical mt-1">
         <h5 class="">Exam results</h5>
             <!--HINT Display exam results-->
+            {% for question in course.lesson_set.first.question_set.all %}
+            <div class="card mt-1">
+                <div class="card-header"><h5>{{question.question}}</h5></div>
+                {% for choice in question.choice_set.all %}
+                    {% if choice.is_correct %}
+                        {% if choice.id in cids %}
+                            <div class="card-header" ><font color="green">Correct answer: {{choice.choice}}</font></div>
+                        {% else %}
+                            <div class="card-header" ><font color="#F6BE00">Not selected: {{choice.choice}}</font></div>                 
+                        {% endif %}
+                    {% else %}
+                        <div class="card-header">{{choice.choice}}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
         </div>
     </div>
 </body>

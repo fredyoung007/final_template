@@ -9,7 +9,7 @@ from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 # Create your views here.
 
 
@@ -115,10 +115,10 @@ def enroll(request, course_id):
 def submit(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
-
     submission = Submission(enrollment = Enrollment.objects.get(user=user, course=course))
     submission.save()
-    submission.choices.set(extract_answers(request))
+    choices = extract_answers(request)
+    submission.choices.add(*choices)
     logger.info(submission)
 
     return redirect('onlinecourse:show_exam_result', course_id=course_id, submission_id=submission.id)
@@ -141,18 +141,22 @@ def extract_answers(request):
         # Calculate the total score
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
-    submission = get_object_or_404(Submission, pk=submission_id)
+    submission = Submission(id=submission_id)
     context = {}
     context['course'] = course
     choices = submission.choices.all()
-    
+    cids = list(choices.values_list('pk', flat=True))
+    context['cids'] = cids
+    logger.info(cids)
+
     # calculate score
     grade = 0
-    for choice_id in choices:
-        choice = Choice(pk=choice_id)
-        if choice.is_correct:
-            question = get_object_or_404(Question, pk=choice.question)
+    for choice in choices:
+        question = Question.objects.get(id=choice.question.id)
+        selected_ids = submission.choices.filter(question_id=question.id).values_list('pk', flat=True)
+        if question.is_get_score(selected_ids):
             grade += question.grade
+
     context['grade'] = grade
     
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
